@@ -15,7 +15,7 @@ app.use(cors({
 // Middleware para manejar JSON (por si en el futuro lo necesitas)
 app.use(express.json());
 
-const upload = multer({ dest: '../kurochat/public/uploads/' });
+const upload = multer({ dest: 'https://kurochat-angel-mondragons-projects.vercel.app/public/uploads/' });
 
 // Función para guardar la imagen correctamente
 const saveImage = (file) => {
@@ -42,6 +42,4 @@ app.post('/upload', upload.single('file'), (req, res) => {
 });
 
 // Iniciar el servidor
-app.listen(4000, () => {
-  console.log('Servidor corriendo en el puerto 4000');
-});
+module.exports = app;
