@@ -5,22 +5,20 @@ const fs = require('node:fs');
 
 const app = express();
 
-// Habilitar CORS antes de definir las rutas
 app.use(cors({
-  origin: ['http://localhost:4000', 'http://localhost:5173'], // Agrega los dominios permitidos
+  origin: '*',
   methods: ['POST'],
   allowedHeaders: ['Content-Type']
 }));
 
-// Middleware para manejar JSON (por si en el futuro lo necesitas)
 app.use(express.json());
 
+// IMPORTANTE: Cambia esta ruta para Vercel
 const upload = multer({ dest: 'https://kurochat-angel-mondragons-projects.vercel.app/public/uploads/' });
 
-// Función para guardar la imagen correctamente
 const saveImage = (file) => {
   try {
-    const newPath = `../kurochat/public/uploads/${file.originalname}`;
+    const newPath = `/tmp/uploads/${file.originalname}`;
     const returnPath = `/uploads/${file.originalname}`;
     fs.renameSync(file.path, newPath);
     return returnPath;
@@ -30,7 +28,6 @@ const saveImage = (file) => {
   }
 };
 
-// Ruta para subir archivos
 app.post('/upload', upload.single('file'), (req, res) => {
   const path = saveImage(req.file);
   
@@ -41,5 +38,5 @@ app.post('/upload', upload.single('file'), (req, res) => {
   res.json({ path: path, status: 200 });
 });
 
-// Iniciar el servidor
+// Exporta la app para Vercel en lugar de usar app.listen()
 module.exports = app;
